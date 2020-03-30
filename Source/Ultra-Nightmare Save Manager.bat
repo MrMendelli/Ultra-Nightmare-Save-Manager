@@ -1,8 +1,15 @@
 @echo off
 
 color 0B
-title Initial Setup
+title Ultra-Nightmare Save Manager
 mode con cols=60 lines=10
+
+for /f "usebackq tokens=2,*" %%a in (
+	`reg query "HKCU\Software\Valve\Steam" /V SteamPath`
+) do (
+	set steamdir=%%b
+)
+set steamdir=%steamdir:/=\%
 
 :menu
 cls
@@ -24,17 +31,21 @@ if exist ".\DOOM\[Backup]" goto :restore
 if not exist ".\DOOM\[Backup]" goto :backup
 
 :backup
-cls
-echo d | xcopy ".\DOOM\base\savegame.user" ".\DOOM\[Backup]" > nul /v /q /s /y
-echo d | xcopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" > nul /v /q /s /y
-echo d | xcopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user\76561198329579577" > nul /v /q /s /y
+robocopy ".\DOOM\base\savegame.user" ".\DOOM\[Backup]" /is >nul
+robocopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" /is >nul
+robocopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user\76561198329579577" /is >nul
 pause
-goto :eof
+goto :rungame
 
 :restore
-cls
-echo d | xcopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" > nul /v /q /s /y
-echo d | xcopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user" > nul /v /q /s /y
+robocopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" /is >nul
+robocopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user" /is >nul
+goto :rungame
+
+:rungame
+pushd "%steamdir%"
+start "" Steam.exe -applaunch 379720
+popd
 goto :eof
 
 :invalid
