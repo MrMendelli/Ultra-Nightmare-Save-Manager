@@ -29,24 +29,24 @@ if /i "%menu%" neq "b" GOTO :invalid
 if /i "%menu%" neq "r" GOTO :invalid
 
 :backup
-rmdir "%savepath%\base\generated" /s /q
-robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE0" "%savepath%\[Backup]\GAME-AUTOSAVE0" > nul /s
-robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE1" "%savepath%\[Backup]\GAME-AUTOSAVE1" > nul /s
-robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE2" "%savepath%\[Backup]\GAME-AUTOSAVE2" > nul /s
-robocopy "%savepath%\base\savegame.user\76561198329579577\PROFILE" "%savepath%\[Backup]\PROFILE" > nul /s
-robocopy "%savepath%\[Backup]\GAME-AUTOSAVE2" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE2" > nul /s
-robocopy "%savepath%\[Backup]\PROFILE" "%savepath%\base\generated\temp\savegame.user\76561198329579577\PROFILE" > nul /s
+echo Backing files up...
+taskkill /im DOOMx64.exe /f >nul 2>&1
+taskkill /im DOOMx64vk.exe /f >nul 2>&1
+robocopy %savepath%\base\savegame.user %savepath%\[Backup] /s /is > nul
+robocopy %savepath%\[Backup] ".\DOOM\base\generated\temp\savegame.user" /is >nul
+robocopy %savepath%\[Backup] ".\DOOM\base\savegame.user\76561198329579577" /is >nul
 goto :rungame
 
 :restore
-robocopy "%savepath%\[Backup]\GAME-AUTOSAVE0" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE0" > nul /s
-robocopy "%savepath%\[Backup]\GAME-AUTOSAVE1" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE1" > nul /s
-robocopy "%savepath%\[Backup]\GAME-AUTOSAVE2" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE2" > nul /s
-robocopy "%savepath%\[Backup]\PROFILE" "%savepath%\base\generated\temp\savegame.user\76561198329579577\PROFILE" > nul /s
+echo Restoring save data...
+taskkill /im DOOMx64.exe /f >nul 2>&1
+taskkill /im DOOMx64vk.exe /f >nul 2>&1
+robocopy %savepath%\[Backup] ".\DOOM\base\generated\temp\savegame.user" /is >nul
+robocopy %savepath%\[Backup] ".\DOOM\base\savegame.user" /is >nul
 goto :rungame
 
 :rungame
-pushd "%steamdir%"
+pushd "%STEAMDIR%"
 start "" Steam.exe -applaunch 379720
 popd
 goto :eof
