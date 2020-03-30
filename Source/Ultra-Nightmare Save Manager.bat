@@ -1,9 +1,5 @@
 @echo off
 
-color 0B
-title Ultra-Nightmare Save Manager
-mode con cols=60 lines=10
-
 for /f "usebackq tokens=2,*" %%a in (
 	`reg query "HKCU\Software\Valve\Steam" /V SteamPath`
 ) do (
@@ -11,7 +7,12 @@ for /f "usebackq tokens=2,*" %%a in (
 )
 set steamdir=%steamdir:/=\%
 
+for %%a in ("%userprofile%\Saved Games\id Software\DOOM") do (set savepath=%%a)
+
 :menu
+color 04
+title Ultra-Nightmare Save Manager
+mode con cols=60 lines=10
 cls
 echo     __________________________________________________
 echo    /                                                  \
@@ -27,19 +28,21 @@ if /i "%menu%" equ "r" GOTO :restore
 if /i "%menu%" neq "b" GOTO :invalid
 if /i "%menu%" neq "r" GOTO :invalid
 
-if exist ".\DOOM\[Backup]" goto :restore
-if not exist ".\DOOM\[Backup]" goto :backup
-
 :backup
-robocopy ".\DOOM\base\savegame.user" ".\DOOM\[Backup]" /is >nul
-robocopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" /is >nul
-robocopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user\76561198329579577" /is >nul
-pause
+rmdir "%savepath%\base\generated" /s /q
+robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE0" "%savepath%\[Backup]\GAME-AUTOSAVE0" > nul /s
+robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE1" "%savepath%\[Backup]\GAME-AUTOSAVE1" > nul /s
+robocopy "%savepath%\base\savegame.user\76561198329579577\GAME-AUTOSAVE2" "%savepath%\[Backup]\GAME-AUTOSAVE2" > nul /s
+robocopy "%savepath%\base\savegame.user\76561198329579577\PROFILE" "%savepath%\[Backup]\PROFILE" > nul /s
+robocopy "%savepath%\[Backup]\GAME-AUTOSAVE2" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE2" > nul /s
+robocopy "%savepath%\[Backup]\PROFILE" "%savepath%\base\generated\temp\savegame.user\76561198329579577\PROFILE" > nul /s
 goto :rungame
 
 :restore
-robocopy ".\DOOM\[Backup]" ".\DOOM\base\generated\temp\savegame.user" /is >nul
-robocopy ".\DOOM\[Backup]" ".\DOOM\base\savegame.user" /is >nul
+robocopy "%savepath%\[Backup]\GAME-AUTOSAVE0" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE0" > nul /s
+robocopy "%savepath%\[Backup]\GAME-AUTOSAVE1" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE1" > nul /s
+robocopy "%savepath%\[Backup]\GAME-AUTOSAVE2" "%savepath%\base\generated\temp\savegame.user\76561198329579577\GAME-AUTOSAVE2" > nul /s
+robocopy "%savepath%\[Backup]\PROFILE" "%savepath%\base\generated\temp\savegame.user\76561198329579577\PROFILE" > nul /s
 goto :rungame
 
 :rungame
@@ -49,6 +52,6 @@ popd
 goto :eof
 
 :invalid
-ECHO msgbox "Please enter 'b' or 'r'...", 0, "Error!" > "%TEMP%\Message.vbs"
-wscript "%TEMP%\Message.vbs"
+echo msgbox "Please enter 'b' or 'r'...", 0, "Error!" > "%temp%\Message.vbs"
+wscript "%temp%\Message.vbs"
 goto :menu
