@@ -30,28 +30,22 @@ if /i "%menu%" neq "r" GOTO :invalid
 
 :backup
 echo Backing files up...
-taskkill /im DOOMx64.exe /f >nul 2>&1
-taskkill /im DOOMx64vk.exe /f >nul 2>&1
 robocopy %savepath%\base\savegame.user %savepath%\[Backup] /s /is > nul
-robocopy %savepath%\[Backup] ".\DOOM\base\generated\temp\savegame.user" /is >nul
-robocopy %savepath%\[Backup] ".\DOOM\base\savegame.user\76561198329579577" /is >nul
-goto :rungame
+echo Done!
+pause
+goto :eof
 
 :restore
 echo Restoring save data...
 taskkill /im DOOMx64.exe /f >nul 2>&1
 taskkill /im DOOMx64vk.exe /f >nul 2>&1
-robocopy %savepath%\[Backup] ".\DOOM\base\generated\temp\savegame.user" /is >nul
-robocopy %savepath%\[Backup] ".\DOOM\base\savegame.user" /is >nul
+robocopy %savepath%\[Backup] %savepath%\base\generated\temp\savegame.user /is >nul
+robocopy %savepath%\[Backup] %savepath%\base\savegame.user /is >nul
+echo Done!
 goto :rungame
 
 :rungame
-pushd "%STEAMDIR%"
+pushd "%steamdir%"
 start "" Steam.exe -applaunch 379720
 popd
 goto :eof
-
-:invalid
-echo msgbox "Please enter 'b' or 'r'...", 0, "Error!" > "%temp%\Message.vbs"
-wscript "%temp%\Message.vbs"
-goto :menu
