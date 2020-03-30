@@ -29,8 +29,8 @@ If you plan to build this with Bat To Exe Converter, make sure `Visible applicat
 
 ## Features
 
-- Automatically reboots the game using the Steam app ID.
-- Tool can now run from any location, no longer has to be next to save files.
+- Automatically reboots the game using the Steam app ID
+- Tool can now run from any location, no longer has to be next to save files
 
 ## Todo
 
