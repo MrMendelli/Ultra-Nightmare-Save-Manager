@@ -25,13 +25,21 @@ echo    ^| Exit ......................................... E ^|
 echo    \__________________________________________________/
 echo.
 set /p menu=" Backup or restore save data? "
-if /i "%menu%" equ "b" goto :backup
+if /i "%menu%" equ "b" goto :check
 if /i "%menu%" equ "r" goto :restore
 if /i "%menu%" equ "f" goto :failsafe
 if /i "%menu%" equ "e" goto :eof
 echo msgbox "Please enter 'b' or 'r' to proceed.", 0, "Error!" > "%TEMP%\Message.vbs"
 wscript "%TEMP%\Message.vbs" /wait
 goto :menu
+
+:check
+if exist [Failsafe] goto :backup
+if not exist [Failsafe] goto :makefailsafe
+
+:makefailsafe
+robocopy %savepath%\base\savegame.user %savepath%\[Failsafe] /s /is > nul
+goto :backup
 
 :backup
 echo Backing files up...
@@ -61,4 +69,8 @@ robocopy %savepath%\[Failsafe] %savepath%\base\savegame.user /s /is >nul
 echo Restoration complete!
 start "" "%steamdir%\Steam.exe" -applaunch 379720
 pause > nul
+goto :menu
+
+:rungame
+start "" "%steamdir%\Steam.exe" -applaunch 379720
 goto :menu
