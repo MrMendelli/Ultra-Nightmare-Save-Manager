@@ -70,7 +70,3 @@ echo Restoration complete!
 start "" "%steamdir%\Steam.exe" -applaunch 379720
 pause > nul
 goto :menu
-
-:rungame
-start "" "%steamdir%\Steam.exe" -applaunch 379720
-goto :menu
