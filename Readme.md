@@ -31,6 +31,7 @@ If you plan to build this with Bat To Exe Converter, make sure `Visible applicat
 
 - Automatically reboots the game using the Steam app ID
 - Tool can now run from any location, no longer has to be next to save files
+- Backup failsafe added, we all make mistakes. Now your backups have backups!
 
 ## Todo
 
