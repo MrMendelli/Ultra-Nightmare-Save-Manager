@@ -14,23 +14,23 @@ color 04
 title Ultra-Nightmare Save Manager
 mode con cols=60 lines=14
 cls
-echo     __________________________________________________
-echo    /                                                  \
-echo    ^|                  BACKUP/RESTORE                  ^|
-echo    ^|__________________________________________________^|
-echo    ^| Backup ....................................... B ^|
-echo    ^| Restore ...................................... R ^|
-echo    ^| Failsafe ..................................... F ^|
-echo    ^| Exit ......................................... E ^|
-echo    \__________________________________________________/
+echo     ____________________________________________________
+echo    /                                                    \
+echo    ^|                   BACKUP/RESTORE                   ^|
+echo    ^|____________________________________________________^|
+echo    ^| Backup ......................................... B ^|
+echo    ^| Restore ........................................ R ^|
+echo    ^| Failsafe ....................................... F ^|
+echo    ^| Exit ........................................... E ^|
+echo    \____________________________________________________/
 echo.
-set /p menu=" Backup or restore save data? "
+set /p menu="Backup or restore save data? "
 if /i "%menu%" equ "b" goto :check
 if /i "%menu%" equ "r" goto :restore
 if /i "%menu%" equ "f" goto :failsafe
 if /i "%menu%" equ "e" goto :eof
-echo msgbox "Please enter 'b' or 'r' to proceed.", 0, "Error!" > "%TEMP%\Message.vbs"
-wscript "%TEMP%\Message.vbs" /wait
+echo Please enter 'b', 'r', or 'f' to proceed.
+pause > nul
 goto :menu
 
 :check
